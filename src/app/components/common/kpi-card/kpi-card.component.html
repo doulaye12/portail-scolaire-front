@@ -1,0 +1,14 @@
+<div class="kpi-card">
+  <div class="illustration-container">
+    <img [src]="data.illustration" [alt]="data.title" class="illustration" />
+  </div>
+  <div class="content">
+    <h3 class="title">{{ data.title }}</h3>
+    <div class="kpi-value">{{ formatKpi(data.kpi) }}</div>
+      @if (data.detailsRoute) {
+        <button class="details-btn" (click)="navigateToDetails()">
+          Voir détails
+        </button>
+      }
+  </div>
+</div>

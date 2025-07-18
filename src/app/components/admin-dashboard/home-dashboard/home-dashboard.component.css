@@ -1,0 +1,34 @@
+.stats-cards {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.card {
+  flex: 1;
+}
+
+.main-panels {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.panel {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+  flex: 1;
+  min-width: 300px;
+}
+
+.alert ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.alert li {
+  padding: 0.3rem 0;
+  color: #c0392b;
+}

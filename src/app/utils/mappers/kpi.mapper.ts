@@ -1,0 +1,3 @@
+const mapKpi = (obj: any) => {
+    
+}

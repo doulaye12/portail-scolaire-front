@@ -1,0 +1,121 @@
+<div class="student-list-container">
+  <div class="header">
+    <h2>Gestion des élèves</h2>
+    <div class="filters">
+      <input type="text" [(ngModel)]="searchTerm" placeholder="Rechercher par nom ou matricule..." />
+
+      <select [(ngModel)]="selectedClass">
+        <option value="">Toutes les classes</option>
+        <option *ngFor="let c of classes" [value]="c">{{ c }}</option>
+      </select>
+
+      <select [(ngModel)]="selectedStatus">
+        <option value="">Tous les statuts</option>
+        <option value="actif">Actif</option>
+        <option value="inactif">Inactif</option>
+      </select>
+    </div>
+    <button id="add-btn" (click)="openModal()">+ Ajouter un élève</button>
+  </div>
+
+  <table class="student-table">
+    <thead>
+      <tr>
+        <th>Matricule</th>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Sexe</th>
+        <th>Classe</th>
+        <th>Statut</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let student of paginatedStudents; let i = index">
+        <td>{{ student.matricule }}</td>
+        <td>{{ student.nom }}</td>
+        <td>{{ student.prenom }}</td>
+        <td>{{ student.sexe }}</td>
+        <td>{{ student.classe }}</td>
+        <td>
+          <span class="badge" [ngClass]="student.statut === 'actif' ? 'badge-actif' : 'badge-inactif'">
+            {{ student.statut }}
+          </span>
+        </td>
+        <td>
+          <button (click)="editStudent(student, i)">
+            <i class="fa-solid fa-pen-to-square"></i>
+          </button>
+          <button (click)="deleteStudent(student)">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="pagination" *ngIf="totalPages > 1">
+  <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">Précédent</button>
+
+  <button
+    *ngFor="let page of [].constructor(totalPages); let i = index"
+    [class.active]="currentPage === i + 1"
+    (click)="changePage(i + 1)">
+    {{ i + 1 }}
+  </button>
+
+  <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">Suivant</button>
+</div>
+
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" *ngIf="showModal">
+  <div class="modal">
+    <h3>{{ editMode ? 'Modification d’un élève' : 'Inscription d’un nouvel élève' }}</h3>
+
+    <form [formGroup]="studentForm" (ngSubmit)="submitForm()">
+      <input type="text" formControlName="matricule" placeholder="Matricule" />
+      <div *ngIf="studentForm.get('matricule')?.touched && studentForm.get('matricule')?.invalid" class="error">
+        Matricule requis.
+      </div>
+
+      <input type="text" formControlName="nom" placeholder="Nom" />
+      <div *ngIf="studentForm.get('nom')?.touched && studentForm.get('nom')?.invalid" class="error">
+        Nom requis.
+      </div>
+
+      <input type="text" formControlName="prenom" placeholder="Prénom" />
+      <div *ngIf="studentForm.get('prenom')?.touched && studentForm.get('prenom')?.invalid" class="error">
+        Prénom requis.
+      </div>
+
+      <select formControlName="sexe">
+        <option value="">Sexe</option>
+        <option value="M">Masculin</option>
+        <option value="F">Féminin</option>
+      </select>
+      <div *ngIf="studentForm.get('sexe')?.touched && studentForm.get('sexe')?.invalid" class="error">
+        Sexe requis.
+      </div>
+
+      <select formControlName="classe">
+        <option value="">Classe</option>
+        <option *ngFor="let c of classes" [value]="c">{{ c }}</option>
+      </select>
+      <div *ngIf="studentForm.get('classe')?.touched && studentForm.get('classe')?.invalid" class="error">
+        Classe requise.
+      </div>
+
+      <select formControlName="statut">
+        <option value="actif">Actif</option>
+        <option value="inactif">Inactif</option>
+      </select>
+
+      <div class="modal-actions">
+        <button type="submit">Enregistrer</button>
+        <button type="button" class="cancel-btn" (click)="closeModal()">Annuler</button>
+      </div>
+    </form>
+  </div>
+</div>

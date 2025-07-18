@@ -1,0 +1,25 @@
+<div class="main">
+  <h1 class="text-primary" >Tableau de bord</h1>
+
+  <div class="stats-cards">
+    <app-kpi-card [data]="classesKpi" class="card"/>
+    <app-kpi-card [data]="elevesKpi" class="card"/>
+    <app-kpi-card [data]="enseignantsKpi" class="card"/>
+  </div>
+
+  <div class="main-panels">
+    <div class="panel">
+      <h2>Moyennes générales</h2>
+      <p>Moyenne générale (Classe 3A) : 12.5</p>
+      <p>Moyenne générale (Classe 3B) : 13.2</p>
+    </div>
+
+    <div class="panel alert">
+      <h2>Alertes</h2>
+      <ul>
+        <li>⚠️ Bulletins non saisis pour 2 classes</li>
+        <li>⚠️ Élèves sans affectation</li>
+      </ul>
+    </div>
+  </div>
+</div>

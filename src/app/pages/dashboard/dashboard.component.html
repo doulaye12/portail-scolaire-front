@@ -1,0 +1,10 @@
+<!-- dashboard.component.html -->
+<div class="dashboard-container">
+  <app-side-bar [user]="user" />
+  <div class="main-wrapper">
+    <app-header [user]="user" />
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

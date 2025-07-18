@@ -1,0 +1,51 @@
+<aside class="sidebar">
+  <h2 class="logo">{{ user?.prenom }} {{ user?.nom }}</h2>
+  <nav class="nav">
+    <a routerLink="/dashboard/admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+      <img
+        src="assets/icons/layout-dashboard.svg"
+        class="icon"
+        alt="Gestion des élèves"
+      />Tableau de bord</a
+    >
+    <a routerLink="/dashboard/admin/eleves" routerLinkActive="active">
+      <img
+        src="assets/icons/graduation-cap.svg"
+        class="icon"
+        alt="Gestion des élèves"
+      />
+      Elèves
+    </a>
+    <a routerLink="/dashboard/admin/enseignants" routerLinkActive="active">
+      <img
+        src="assets/icons/id-card-lanyard.svg"
+        class="icon"
+        alt="Gestion des élèves"
+      />
+      Enseignants</a
+    >
+    <a routerLink="/dashboard/admin/classes" routerLinkActive="active">
+      <img
+        src="assets/icons/classroom.svg"
+        class="icon"
+        alt="Gestion des élèves"
+      />
+      Classes
+    </a>
+    <a routerLink="/dashboard/admin/matieres" routerLinkActive="active">
+      <img
+        src="assets/icons/message-square-diff.svg"
+        class="icon"
+        alt="Gestion des élèves"
+      />
+      Matières
+    </a>
+    <a routerLink="/dashboard/admin/bulletins" routerLinkActive="active">
+      <img
+        src="assets/icons/scroll-text.svg"
+        class="icon"
+        alt="Gestion des élèves"
+      />Bulletins</a
+    >
+  </nav>
+</aside>

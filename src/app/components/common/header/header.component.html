@@ -1,0 +1,19 @@
+<div class="header">
+  <div class="logo-area">
+    <img src="assets/icons/school.svg" alt="Logo École" class="school-logo" />
+  </div>
+  <div class="user-area" (click)="toggleDropdown()">
+    <img
+      [src]="user?.photoUrl || 'assets/icons/circle-user-round.svg'"
+      alt="Avatar"
+      class="avatar"
+    />
+    <span class="dropdown-icon">▼</span>
+
+    <ul class="dropdown-menu" [class.show]="dropdownOpen">
+      <li><a href="#">Profil</a></li>
+      <li><a href="#">Paramètres</a></li>
+      <li><a href="#" (click)="logout()">Déconnexion</a></li>
+    </ul>
+  </div>
+</div>
