@@ -4,7 +4,6 @@ export interface Classe {
   niveau: string;
   effectif_max: number;
   description: string;
-  // Liste des élèves dans cette classe (optionnel)
   eleves?: Eleve[];
 }
 
@@ -34,9 +33,17 @@ export interface Eleve {
   nom_tuteur: string;
   telephone_tuteur: string;
   email_tuteur: string;
-  document_justificatif: string;
+  document_justificatif: Document;
+  user: User
   classe?: Classe;
   bulletins?: Bulletin[];
+}
+
+export interface Document {
+  id?: number;
+  name: string;
+  type: number;
+  data: string;
 }
 
 export interface Enseignant {
@@ -82,12 +89,64 @@ export interface Periode {
   active: boolean;
 }
 
+
+
+
+
+
+
+
+
+
+
+// New updates
+
+export interface LoggedUser {
+  success: boolean
+  user: User
+  token: string
+  role: string
+}
+
 export interface User {
-  id?: number;
-  nom: string;
-  prenom: string;
-  email: string;
-  password: string;
-  role: 'admin' | 'enseignant' | 'eleve' | 'parent' | string;
-  actif: boolean;
+  id: number
+  nom: string
+  prenom: string
+  email: string
+  email_verified_at: any
+  role: "administrateur" | "enseignant" | "eleve" | "parent"
+  actif: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface UserDashboard {
+  success: boolean
+  statistiques_generales: StatistiquesGenerales
+  statistiques_par_classe: StatistiquesParClasse[]
+  repartition_mentions: any[]
+  periode_active: PeriodeActive
+}
+
+export interface StatistiquesGenerales {
+  nombre_eleves: number
+  nombre_enseignants: number
+  nombre_classes: number
+  nombre_bulletins_generes: number
+}
+
+export interface StatistiquesParClasse {
+  classe: string
+  effectif: number
+  moyenne_classe: any
+}
+
+export interface PeriodeActive {
+  id: number
+  nom: string
+  date_debut: string
+  date_fin: string
+  active: boolean
+  created_at: string
+  updated_at: string
 }

@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Enseignant } from '../../../models';
+import {Component, EventEmitter, Output} from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {Classe, Enseignant, Matiere} from '../../../models';
 import { EnseignantsService } from '../../../services/enseignants/enseignants.service';
 import { NgFor, NgIf } from '@angular/common';
+import {ClasseService} from "../../../services/classes/classe.service";
+import {MatieresService} from "../../../services/matieres/matieres.service";
 
 @Component({
   selector: 'app-enseignants',
@@ -14,83 +16,73 @@ import { NgFor, NgIf } from '@angular/common';
 export class EnseignantsComponent {
 
   enseignants: Enseignant[] = [];
+  classes: Classe[] = [];
+  allMatieres: Matiere[] = [];
   enseignantForm: FormGroup;
-  editingId: number | null = null;
   successMessage = '';
   errorMessage = '';
 
   constructor(
     private enseignantService: EnseignantsService,
+    private classService: ClasseService,
+    private matiereService: MatieresService,
     private fb: FormBuilder
   ) {
-    this.enseignantForm = this.fb.group({
-      user_id: [null, Validators.required],
-      numero_enseignant: ['', Validators.required],
-      specialite: ['', Validators.required],
-      date_embauche: ['', Validators.required],
-      telephone: ['', Validators.required],
-      diplomes: ['', Validators.required]
+      this.enseignantForm = this.fb.group({
+        nom: ['', Validators.required],
+        prenom: ['', Validators.required],
+        email: ['', [Validators.required, Validators.email]],
+        specialite: ['', Validators.required],
+        date_embauche: ['', Validators.required],
+        telephone: [''],
+        diplomes: [''],
+        matieres: this.fb.array([])
     });
   }
 
   ngOnInit(): void {
     this.getAllEnseignants();
+    this.getAllMatieres();
+    this.getAllClasses();
   }
 
   getAllEnseignants(): void {
-    this.enseignantService.getAll().subscribe({
-      next: (data) => this.enseignants = data,
-      error: () => this.errorMessage = 'Erreur lors du chargement des enseignants.'
+    this.enseignantService.getAll().subscribe((response: any )=> {
+      this.enseignants = response.enseignants
     });
   }
 
+  get matieres(): FormArray {
+    return this.enseignantForm.get('matieres') as FormArray;
+  }
+
+  addMatiere(): void {
+    const matiereGroup = this.fb.group({
+      matiere_id: [null, Validators.required],
+      classe_id: [null, Validators.required]
+    });
+    this.matieres.push(matiereGroup);
+  }
+
+  removeMatiere(index: number): void {
+    this.matieres.removeAt(index);
+  }
+
   onSubmit(): void {
-    if (this.enseignantForm.invalid) return;
-
-    const formValue = this.enseignantForm.value;
-
-    if (this.editingId) {
-      this.enseignantService.update(this.editingId, formValue).subscribe({
-        next: () => {
-          this.successMessage = 'Enseignant mis à jour avec succès.';
-          this.getAllEnseignants();
-          this.resetForm();
-        },
-        error: () => this.errorMessage = 'Erreur lors de la mise à jour.'
-      });
-    } else {
-      this.enseignantService.create(formValue).subscribe({
-        next: () => {
-          this.successMessage = 'Enseignant ajouté avec succès.';
-          this.getAllEnseignants();
-          this.resetForm();
-        },
-        error: () => this.errorMessage = 'Erreur lors de l\'ajout.'
-      });
-    }
+    this.enseignantService.create(this.enseignantForm.value).subscribe((res:any) => {
+      console.log(res);
+    })
   }
 
-  edit(enseignant: Enseignant): void {
-    this.editingId = enseignant.id!;
-    this.enseignantForm.patchValue(enseignant);
+  getAllClasses() {
+    this.classService.getAllClasses().subscribe((data: any) => {
+      this.classes = data.classes;
+    })
   }
 
-  delete(id: number): void {
-    if (confirm('Confirmer la suppression ?')) {
-      this.enseignantService.delete(id).subscribe({
-        next: () => {
-          this.successMessage = 'Enseignant supprimé.';
-          this.getAllEnseignants();
-        },
-        error: () => this.errorMessage = 'Erreur lors de la suppression.'
-      });
-    }
-  }
-
-  resetForm(): void {
-    this.enseignantForm.reset();
-    this.editingId = null;
-    this.successMessage = '';
-    this.errorMessage = '';
+  getAllMatieres() {
+    this.matiereService.getAllMatieres().subscribe((data: any) => {
+      this.allMatieres = data.matieres;
+    })
   }
 }

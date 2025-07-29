@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { SideBarComponent } from "../../components/common/side-bar/side-bar.component";
 import { HeaderComponent } from '../../components/common/header/header.component';
+import { User } from '../../models';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,14 +12,16 @@ import { HeaderComponent } from '../../components/common/header/header.component
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit{
 
- user: any | null;
+ user!: User | null;
 
   constructor(private authService: AuthService) {
+  }
+  
+  ngOnInit(): void {
     this.user = this.authService.getCurrentUser();
   }
 
   
-
 }

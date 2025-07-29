@@ -134,7 +134,7 @@ button:last-child {
   background: white;
   padding: 2rem;
   border-radius: 10px;
-  width: 400px;
+  width: 500px;
   max-width: 90%;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
@@ -214,4 +214,17 @@ button:last-child {
 .pagination button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.row .col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  flex: 1;
 }

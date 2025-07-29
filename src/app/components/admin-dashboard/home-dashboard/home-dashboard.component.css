@@ -32,3 +32,13 @@
   padding: 0.3rem 0;
   color: #c0392b;
 }
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.semestre {
+  border: 1px solid gray;
+  border-radius: 8px;
+  padding: 5px 8px;
+}

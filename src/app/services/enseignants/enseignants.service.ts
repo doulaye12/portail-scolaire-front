@@ -14,8 +14,8 @@ export class EnseignantsService {
   constructor(private http: HttpClient) {}
 
   // ✔️ GET : Liste de tous les enseignants
-  getAll(): Observable<Enseignant[]> {
-    return this.http.get<Enseignant[]>(`${this.apiUrl}/enseignants`);
+  getAll(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/enseignants`);
   }
 
   // ✔️ GET : Enseignant par ID
@@ -37,5 +37,5 @@ export class EnseignantsService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
-  
+
 }

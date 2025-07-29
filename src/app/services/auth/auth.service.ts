@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import {environment} from "../../../environments/environment.development";
+import { LoggedUser, User } from '../../models';
 
 export interface UserLogin {
   email: string;
@@ -18,7 +19,7 @@ export class AuthService {
   private tokenKey = 'auth_token';
   private userKey = 'auth_user';
 
-  private currentUserSubject = new BehaviorSubject<any | null>(this.getUserFromStorage());
+  private currentUserSubject = new BehaviorSubject<User | null>(this.getUserFromStorage());
   public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(
@@ -26,8 +27,8 @@ export class AuthService {
     private router: Router
   ) {}
 
-  login(user: UserLogin): Observable<any> {
-    return this.http.post<any>(`${environment.apiUrl}/login`, user).pipe(
+  login(user: UserLogin): Observable<LoggedUser> {
+    return this.http.post<LoggedUser>(`${environment.apiUrl}/login`, user).pipe(
       tap((res) => {
         localStorage.setItem(this.tokenKey, res.token);
         localStorage.setItem(this.userKey, JSON.stringify(res.user));
@@ -47,11 +48,11 @@ export class AuthService {
     return localStorage.getItem(this.tokenKey);
   }
 
-  getCurrentUser(): any | null {
+  getCurrentUser(): User | null {
     return this.currentUserSubject.value;
   }
 
-  private getUserFromStorage(): any | null {
+  private getUserFromStorage(): User | null {
     const userJson = localStorage.getItem(this.userKey);
     return userJson ? JSON.parse(userJson) : null;
   }

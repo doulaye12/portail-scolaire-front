@@ -1,5 +1,8 @@
 <div class="main">
-  <h1 class="text-primary" >Tableau de bord</h1>
+  <div class="page-header">
+    <h1 class="text-primary" >Tableau de bord</h1>
+    <h4 class="semestre">{{dasboard?.periode_active?.nom}}</h4>
+  </div>
 
   <div class="stats-cards">
     <app-kpi-card [data]="classesKpi" class="card"/>
