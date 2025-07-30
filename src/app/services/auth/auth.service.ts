@@ -60,4 +60,8 @@ export class AuthService {
   isAuthenticated(): boolean {
     return !!this.getToken();
   }
+
+  getUserInfos() {
+    return this.http.get(`${environment.apiUrl}/me`);
+  }
 }

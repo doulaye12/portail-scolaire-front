@@ -27,7 +27,7 @@ export class EnseignantsService {
 
   // ✔️ GET : Enseignant par ID
   getById(id: number): Observable<Enseignant> {
-    return this.http.get<Enseignant>(`${this.apiUrl}/${id}`, this.httpOptions);
+    return this.http.get<Enseignant>(`${this.apiUrl}/enseignants/${id}`, this.httpOptions);
   }
 
   // ✔️ POST : Créer un enseignant
@@ -44,6 +44,14 @@ export class EnseignantsService {
   // ✔️ DELETE : Supprimer un enseignant
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/enseignants/${id}`, this.httpOptions);
+  }
+
+  getAllMyClasses() {
+     return this.http.get<Enseignant>(`${this.apiUrl}/enseignant/mes-classes`, this.httpOptions);
+  }
+
+  getAllStudentOfMyClasse(classe_id: number) {
+    return this.http.get<Enseignant>(`${this.apiUrl}/enseignant/classe/${classe_id}/eleves`, this.httpOptions);
   }
 
 }

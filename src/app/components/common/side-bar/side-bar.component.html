@@ -1,14 +1,14 @@
 <aside class="sidebar">
-  <h2 class="logo">{{ user?.prenom }} {{ user?.nom }}</h2>
+  <h2 class="logo">{{ user.prenom }} {{ user.nom }}</h2>
   <nav class="nav">
-    <a routerLink="/dashboard/admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+    <a routerLink="/dashboard/{{user.role}}" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
       <img
         src="assets/icons/layout-dashboard.svg"
         class="icon"
         alt="Gestion des élèves"
       />Tableau de bord</a
     >
-    <a routerLink="/dashboard/admin/eleves" routerLinkActive="active">
+    <a routerLink="/dashboard/admin/eleves" routerLinkActive="active" *ngIf="user.role === 'administrateur'" >
       <img
         src="assets/icons/graduation-cap.svg"
         class="icon"
@@ -16,7 +16,7 @@
       />
       Elèves
     </a>
-    <a routerLink="/dashboard/admin/enseignants" routerLinkActive="active">
+    <a routerLink="/dashboard/admin/enseignants" routerLinkActive="active" *ngIf="user.role === 'administrateur'">
       <img
         src="assets/icons/id-card-lanyard.svg"
         class="icon"
@@ -24,7 +24,7 @@
       />
       Enseignants</a
     >
-    <a routerLink="/dashboard/admin/classes" routerLinkActive="active">
+    <a routerLink="/dashboard/admin/classes" routerLinkActive="active" *ngIf="user.role === 'administrateur' ">
       <img
         src="assets/icons/classroom.svg"
         class="icon"
@@ -32,7 +32,15 @@
       />
       Classes
     </a>
-    <a routerLink="/dashboard/admin/matieres" routerLinkActive="active">
+    <a routerLink="/dashboard/enseignant/classes" routerLinkActive="active" *ngIf="user.role === 'enseignant' ">
+      <img
+        src="assets/icons/classroom.svg"
+        class="icon"
+        alt="Gestion des élèves"
+      />
+      Mes Classes
+    </a>
+    <a routerLink="/dashboard/admin/matieres" routerLinkActive="active" *ngIf="user.role === 'administrateur'">
       <img
         src="assets/icons/message-square-diff.svg"
         class="icon"
@@ -40,7 +48,15 @@
       />
       Matières
     </a>
-    <a routerLink="/dashboard/admin/bulletins" routerLinkActive="active">
+    <a routerLink="/dashboard/enseignant/notes" routerLinkActive="active" *ngIf="user.role === 'eleve'">
+      <img
+        src="assets/icons/note.svg"
+        class="icon"
+        alt="Gestion des élèves"
+      />
+      Notes
+    </a>
+    <a routerLink="/dashboard/bulletins" routerLinkActive="active">
       <img
         src="assets/icons/scroll-text.svg"
         class="icon"

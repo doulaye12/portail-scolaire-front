@@ -1,0 +1,27 @@
+<div class="classes-container" *ngIf="!isLoading">
+  <h2>Mes Classes</h2>
+
+  <div *ngIf="classes.length === 0">Aucune classe assignée pour le moment.</div>
+
+  <div *ngFor="let classe of classes" class="card">
+    <h3>{{ classe.nom }} ({{ classe.niveau }})</h3>
+    <p><strong>Effectif Max :</strong> {{ classe.effectif_max }}</p>
+
+    <div *ngIf="classe.matieres.length > 0">
+      <p><strong>Matière(s) enseignée(s) :</strong></p>
+      <ul>
+        <li *ngFor="let matiere of classe.matieres">
+          {{ matiere.nom }} (Code: {{ matiere.code }}) - Coefficient : {{ matiere.coefficient }}
+        </li>
+      </ul>
+    </div>
+
+    <button (click)="voirDetailsClasse(classe.id)" class="btn-detail">
+      Voir détails
+    </button>
+  </div>
+</div>
+
+<div class="loading" *ngIf="isLoading">
+  Chargement...
+</div>

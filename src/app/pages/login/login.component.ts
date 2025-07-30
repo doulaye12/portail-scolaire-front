@@ -28,16 +28,22 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.errorMessage = ""
     if(this.loginForm.valid){
-      this.authService.login(this.loginForm.value).subscribe(
-        (response:any) => {
+      this.authService.login(this.loginForm.value).subscribe({
+        next: (response:any) => {
         if(response.success){
-          this.router.navigateByUrl("/dashboard")
+          if (response.role === "administrateur") {
+            this.router.navigateByUrl("/dashboard/admin");
+          } else if (response.role === "enseignant") {
+            this.router.navigateByUrl("/dashboard/enseignant");
+          } else if (response.role === "eleve") {
+            this.router.navigateByUrl("/dashboard/eleve");
+          }
         }},
-        (error) => {
+        error: (error) => {
           this.errorMessage = error.error.message
           this.hasError = true
         }
-      )   
+      })   
     }
    
   }

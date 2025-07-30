@@ -54,7 +54,8 @@ export interface Enseignant {
   date_embauche: string;
   telephone: string;
   diplomes: string;
-  matieres: Array<Object>
+  matieres: Matiere[];
+  classes: Classe[];
   user?: User;
 }
 

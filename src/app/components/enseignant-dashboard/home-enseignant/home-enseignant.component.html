@@ -1,0 +1,26 @@
+<div class="dashboard-container" *ngIf="!isLoading && user && enseignant">
+  <div class="page-header" >
+    <h2>Bienvenue {{ user.prenom }} {{ user.nom }}</h2>
+    <button type="button" routerLink="/dashboard/enseignant/classes" routerLinkActive="router-link-active"  >Voir mes classes</button>
+  </div>
+
+  <div class="card">
+    <h3>Informations personnelles</h3>
+    <p><strong>Email :</strong> {{ user.email }}</p>
+    <p><strong>Rôle :</strong> {{ user.role | titlecase }}</p>
+    <p><strong>Actif :</strong> {{ user.actif ? 'Oui' : 'Non' }}</p>
+  </div>
+
+  <div class="card">
+    <h3>Informations professionnelles</h3>
+    <p><strong>Numéro Enseignant :</strong> {{ enseignant.numero_enseignant }}</p>
+    <p><strong>Spécialité :</strong> {{ enseignant.specialite }}</p>
+    <p><strong>Date d'embauche :</strong> {{ enseignant.date_embauche | date:'dd/MM/yyyy' }}</p>
+    <p><strong>Téléphone :</strong> {{ enseignant.telephone }}</p>
+    <p><strong>Diplômes :</strong> {{ enseignant.diplomes }}</p>
+  </div>
+</div>
+
+<div class="loading" *ngIf="isLoading">
+  Chargement des informations...
+</div>

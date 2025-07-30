@@ -106,9 +106,21 @@ export class EnseignantsComponent {
   }
 
   updateEnseignant() {
+    const newMatieres: { matiere_id: number | undefined; classe_id: number | undefined; }[] = [];
+    this.editingEnseignant.classes.forEach((classe: any, i: number) => {
+      this.editingEnseignant.matieres.forEach((mat: any, j: number) => {
+        if (i === j) {
+          newMatieres.push({
+            matiere_id: mat.id,
+            classe_id: classe.id
+          })
+        }
+      })
+    })
+    
     const payload = {
       ...this.enseignantForm.value,
-      matieres: this.editingEnseignant.matieres,
+      ...(this.enseignantForm.get('matieres') ? null : {matieres: this.editingEnseignant.matieres}),
     };
     this.enseignantService.update(this.selectedLineId, payload).subscribe({
       next: (res: any) => {
