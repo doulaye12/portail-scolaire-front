@@ -196,3 +196,22 @@ form {
   position: relative;
   padding-bottom: 1.5rem;
 }
+
+/* Ajoute dans ton fichier .css lié au composant */
+.pagination {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-top: 1rem;
+  gap: 10px;
+
+  button {
+    background-color: transparent;
+    color: #1a237e;
+  }
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

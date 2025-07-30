@@ -37,13 +37,13 @@ export class EnseignantsService {
 
 
   // ✔️ PUT : Mettre à jour un enseignant
-  update(id: number, enseignant: Enseignant): Observable<Enseignant> {
-    return this.http.put<Enseignant>(`${this.apiUrl}/${id}`, enseignant);
+  update(id: number, enseignant: Enseignant): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/enseignants/${id}`, enseignant);
   }
 
   // ✔️ DELETE : Supprimer un enseignant
   delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`, this.httpOptions);
+    return this.http.delete<void>(`${this.apiUrl}/enseignants/${id}`, this.httpOptions);
   }
 
 }

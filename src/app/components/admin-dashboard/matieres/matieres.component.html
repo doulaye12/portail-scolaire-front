@@ -27,8 +27,8 @@
           <td>{{ mat.niveau }}</td>
           <td>{{ mat.coefficient }}</td>
           <td>
-            <button (click)="editMatiere(i)" >✏️</button>
-            <button class="danger" (click)="confirmDelete(mat)" >🗑️</button>
+            <button (click)="editMatiere(i)">✏️</button>
+            <button class="danger" (click)="confirmDelete(mat)">🗑️</button>
           </td>
         </tr>
       </tbody>
@@ -49,7 +49,7 @@
   </div>
   <div class="right" *ngIf="isAddForm">
     <form [formGroup]="matiereForm" (ngSubmit)="onSubmit()" class="form-card">
-      <div class="form-header"  >
+      <div class="form-header">
         <h2>Nouvelle Matière</h2>
       </div>
       <div>
@@ -89,7 +89,11 @@
 
       <div>
         <label for="description">Description</label>
-        <textarea id="description" name="description" formControlName="description"></textarea>
+        <textarea
+          id="description"
+          name="description"
+          formControlName="description"
+        ></textarea>
       </div>
 
       <button type="submit" [disabled]="matiereForm.invalid">
@@ -102,7 +106,9 @@
 <app-confirm-dialog
   *ngIf="showConfirm"
   title="Confirmation"
-  [message]="'Voulez-vous vraiment supprimer la matière ' + selectedMatiere?.nom + ' ?'"
+  [message]="
+    'Voulez-vous vraiment supprimer la matière ' + selectedMatiere?.nom + ' ?'
+  "
   (confirm)="deleteMatiere()"
   (cancel)="showConfirm = false"
 ></app-confirm-dialog>

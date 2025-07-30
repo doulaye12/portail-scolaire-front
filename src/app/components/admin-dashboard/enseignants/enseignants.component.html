@@ -1,7 +1,9 @@
 <div class="container">
   <div class="page-header">
     <h2>Gestion des Enseignants</h2>
-    <button class="add-btn" (click)="addEnseignant()" >Ajouter un enseignant</button>
+    <button class="add-btn" (click)="addEnseignant()">
+      Ajouter un enseignant
+    </button>
   </div>
 
   <div *ngIf="successMessage" class="alert success">{{ successMessage }}</div>
@@ -10,8 +12,8 @@
   <table class="styled-table">
     <thead>
       <tr>
-        <th>ID</th>
-        <th>Numéro</th>
+        <th>Prénom</th>
+        <th>Nom</th>
         <th>Spécialité</th>
         <th>Date d'embauche</th>
         <th>Téléphone</th>
@@ -21,24 +23,41 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let ens of enseignants">
-        <td>{{ ens.id }}</td>
-        <td>{{ ens.numero_enseignant }}</td>
+      <tr *ngFor="let ens of paginatedEnseignants">
+        <td>{{ ens.user.prenom }}</td>
+        <td>{{ ens.user.nom }}</td>
         <td>{{ ens.specialite }}</td>
-        <td>{{ ens.date_embauche | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ ens.date_embauche | date : "dd/MM/yyyy" }}</td>
         <td>{{ ens.telephone }}</td>
         <td>{{ ens.diplomes }}</td>
         <td>{{ ens.user_id }}</td>
         <td>
-          <button>✏️</button>
-          <button class="danger">🗑️</button>
+          <button (click)="editEnseignant(ens)">✏️</button>
+          <button class="danger" (click)="deleteEnseignant(ens)">🗑️</button>
         </td>
       </tr>
     </tbody>
   </table>
+  <div class="pagination">
+    <button
+      (click)="currentPage = currentPage - 1"
+      [disabled]="currentPage === 1"
+    >
+      ◀️ Précédent
+    </button>
+
+    <span>Page {{ currentPage }} / {{ totalPages }}</span>
+
+    <button
+      (click)="currentPage = currentPage + 1"
+      [disabled]="currentPage === totalPages"
+    >
+      Suivant ▶️
+    </button>
+  </div>
 </div>
 
-<div class="modal-overlay" *ngIf="showModal" >
+<div class="modal-overlay" *ngIf="showModal">
   <div class="modal-content">
     <h2>Ajouter un Enseignant</h2>
 
@@ -185,3 +204,9 @@
     </form>
   </div>
 </div>
+<app-confirm-dialog
+  *ngIf="isDelete"
+  [message]="'Voulez-vous vraiment supprimer cet élément ?'"
+  (confirm)="confirmDelete()"
+  (cancel)="isDelete = false"
+></app-confirm-dialog>
