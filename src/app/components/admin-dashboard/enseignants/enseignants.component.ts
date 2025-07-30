@@ -2,14 +2,14 @@ import {Component, EventEmitter, Output} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Classe, Enseignant, Matiere} from '../../../models';
 import { EnseignantsService } from '../../../services/enseignants/enseignants.service';
-import { NgFor, NgIf } from '@angular/common';
+import { DatePipe, NgFor, NgIf } from '@angular/common';
 import {ClasseService} from "../../../services/classes/classe.service";
 import {MatieresService} from "../../../services/matieres/matieres.service";
 
 @Component({
   selector: 'app-enseignants',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, NgFor],
+  imports: [ReactiveFormsModule, NgIf, NgFor, DatePipe],
   templateUrl: './enseignants.component.html',
   styleUrl: './enseignants.component.css'
 })
@@ -21,6 +21,9 @@ export class EnseignantsComponent {
   enseignantForm: FormGroup;
   successMessage = '';
   errorMessage = '';
+
+  showModal = false;
+
 
   constructor(
     private enseignantService: EnseignantsService,
@@ -69,8 +72,18 @@ export class EnseignantsComponent {
   }
 
   onSubmit(): void {
-    this.enseignantService.create(this.enseignantForm.value).subscribe((res:any) => {
-      console.log(res);
+    this.enseignantService.create(this.enseignantForm.value).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.showModal = false;
+          this.enseignantForm.reset()
+          this.getAllEnseignants()
+          this.successMessage = res.message
+        }
+      },
+      error: (error) => {
+        this.errorMessage = error.error.message
+      }
     })
   }
 
@@ -84,5 +97,13 @@ export class EnseignantsComponent {
     this.matiereService.getAllMatieres().subscribe((data: any) => {
       this.allMatieres = data.matieres;
     })
+  }
+
+  addEnseignant() {
+    this.showModal = true;
+  }
+
+  close() {
+    this.showModal = false;
   }
 }

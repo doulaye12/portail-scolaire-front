@@ -1,4 +1,4 @@
-import { NgClass, NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf,  } from '@angular/common';
 import { Component } from '@angular/core';
 import {
   FormBuilder,
@@ -8,14 +8,22 @@ import {
   Validators,
 } from '@angular/forms';
 import { ElevesService } from '../../../services/eleves/eleves.service';
-import {Classe, Document, Eleve} from '../../../models';
+import { Classe, Document, Eleve } from '../../../models';
 import { ClasseService } from '../../../services/classes/classe.service';
-import {CustomToastComponent} from "../../common/custom-toast/custom-toast.component";
+import { CustomToastComponent } from '../../common/custom-toast/custom-toast.component';
+import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-eleves',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, NgFor, NgIf, CustomToastComponent],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    NgFor,
+    NgIf,
+    CustomToastComponent,
+    ConfirmDialogComponent
+  ],
   templateUrl: './eleves.component.html',
   styleUrl: './eleves.component.css',
 })
@@ -34,12 +42,13 @@ export class ElevesComponent {
 
   studentForm!: FormGroup;
   editMode: boolean = false;
-  editingIndex: number | null = null;
+  editingIndex!: number;
   currentPage: number = 1;
   itemsPerPage: number = 10;
   selectedFile!: any;
   documentJustificatif!: Document;
-  toastMessage: string = ""
+  toastMessage: string = '';
+  showConfirm = false;
 
   constructor(
     private fb: FormBuilder,
@@ -84,13 +93,11 @@ export class ElevesComponent {
       nom_tuteur: ['', Validators.required],
       telephone_tuteur: ['', Validators.required],
       email_tuteur: ['', [Validators.required, Validators.email]],
-      document_justificatif: [null, Validators.required],
     });
   }
 
   openModal() {
     this.editMode = false;
-    this.editingIndex = null;
     this.studentForm.reset({ statut: 'actif' });
     this.showModal = true;
   }
@@ -127,14 +134,16 @@ export class ElevesComponent {
     if (file) {
       this.selectedFile = file.files?.[0];
       try {
-        const base64EncodedData = await this.getBase64FromFile(this.selectedFile);
+        const base64EncodedData = await this.getBase64FromFile(
+          this.selectedFile
+        );
         const fileExtension = this.selectedFile.type.split('/')[1];
         this.documentJustificatif = {
           name: this.selectedFile.name,
           type: fileExtension,
           data: base64EncodedData,
-        }
-      }catch (err) {
+        };
+      } catch (err) {
         console.error(err);
       }
     }
@@ -147,39 +156,41 @@ export class ElevesComponent {
 
     const payload = {
       ...this.studentForm.value,
-      document_justificatif: this.documentJustificatif
-    }
+      document_justificatif: this.documentJustificatif,
+    };
 
     if (!this.editMode) {
-      this.eleveService.createEleve(payload).subscribe(res => {
+      this.eleveService.createEleve(payload).subscribe((res) => {
         if (res.success) {
-          this.studentForm.reset()
+          this.studentForm.reset();
           this.closeModal();
           this.toastMessage = res.message;
           this.showToast = true;
-          this.typeToast = "success";
+          this.typeToast = 'success';
           setTimeout(() => {
-            this.showToast = false
-            this.toastMessage = ""
+            this.showToast = false;
+            this.toastMessage = '';
           }, 6000);
           this.getAllStudents();
         }
       });
-    }else {
-      this.eleveService.updateEleve(this.editingIndex!, payload).subscribe(res => {
-        if (res.success) {
-          this.studentForm.reset()
-          this.closeModal();
-          this.toastMessage = res.message;
-          this.showToast = true;
-          this.typeToast = "success";
-          setTimeout(() => {
-            this.showToast = false
-            this.toastMessage = ""
-          }, 6000);
-          this.getAllStudents();
-        }
-      })
+    } else {
+      this.eleveService
+        .updateEleve(this.editingIndex!, payload)
+        .subscribe((res) => {
+          if (res.success) {
+            this.studentForm.reset();
+            this.closeModal();
+            this.toastMessage = res.message;
+            this.showToast = true;
+            this.typeToast = 'success';
+            setTimeout(() => {
+              this.showToast = false;
+              this.toastMessage = '';
+            }, 6000);
+            this.getAllStudents();
+          }
+        });
     }
   }
 
@@ -230,13 +241,11 @@ export class ElevesComponent {
     return Math.ceil(filteredCount / this.itemsPerPage);
   }
 
-  editStudent(student: any, index: number) {
+  editStudent(student: any) {
     this.editMode = true;
-    this.editingIndex = index;
+    this.editingIndex = student.id;
     const date = new Date(student.date_naissance);
     const formatedDate = date.toLocaleDateString('fr-FR');
-
-    console.log(formatedDate);
 
     this.studentForm.setValue({
       nom: student.user.nom,
@@ -251,21 +260,40 @@ export class ElevesComponent {
       nom_tuteur: student.nom_tuteur,
       telephone_tuteur: student.telephone_tuteur,
       email_tuteur: student.email_tuteur,
-      document_justificatif: null,
     });
 
     this.showModal = true;
   }
 
-  deleteStudent(id: number) {
-    this.eleveService.deleteEleve(id).subscribe(res => {
-      console.log(res)
-    })
+  deleteStudent() {
+    this.eleveService.deleteEleve(this.editingIndex).subscribe({
+      next: (res: any) => {
+        if (res.success) {
+          this.showToast = true;
+          this.getAllStudents();
+          (this.typeToast = 'success'), (this.toastMessage = res.message);
+        }
+      },
+      error: (error) => {
+        this.showToast = true;
+        (this.typeToast = 'fail'), (this.toastMessage = error.error.message);
+      },
+    });
+    this.showConfirm = false;
+    setTimeout(() => {
+      this.showToast = false;
+      this.toastMessage = '';
+    }, 6000);
   }
 
   changePage(page: number) {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
     }
+  }
+
+  confirmDelete(id: number) {
+    this.editingIndex = id;
+    this.showConfirm = true;
   }
 }

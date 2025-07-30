@@ -1,1 +1,90 @@
-<p>classes works!</p>
+<div class="container">
+  <div class="left">
+    <div class="page-header">
+      <h2>Gestion des Classes</h2>
+      <button class="add-btn" (click)="toggleForm()">
+        {{ isAddForm ? "Fermer ➡️" : "Ajouter une classe" }}
+      </button>
+    </div>
+
+    <!-- <div *ngIf="successMessage" class="alert success">{{ successMessage }}</div>
+    <div *ngIf="errorMessage" class="alert error">{{ errorMessage }}</div> -->
+
+    <table class="styled-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Niveau</th>
+          <th>Effectif max</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let classe of paginatedClasses">
+          <td>{{ classe.id }}</td>
+          <td>{{ classe.nom }}</td>
+          <td>{{ classe.niveau }}</td>
+          <td>{{ classe.effectif_max }}</td>
+          <td>
+            <button (click)="editClasse(classe)">✏️</button>
+            <button class="danger" (click)="confirmDelete(classe)">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="pagination-controls">
+      <button (click)="changePage(-1)" [disabled]="currentPage === 1">⬅️ Précédent</button>
+      <span>Page {{ currentPage }} / {{ totalPages }}</span>
+      <button (click)="changePage(1)" [disabled]="currentPage * itemsPerPage >= classes.length">Suivant ➡️</button>
+    </div>
+  </div>
+
+  <div class="right" *ngIf="isAddForm">
+    <form [formGroup]="classeForm" (ngSubmit)="submit()" class="form-card">
+      <div class="form-header">
+        <h2>{{ editing ? 'Modifier' : 'Nouvelle' }} Classe</h2>
+      </div>
+
+      <div>
+        <label for="nom">Nom</label>
+        <input id="nom" name="nom" formControlName="nom" type="text" />
+      </div>
+
+      <div>
+        <label for="niveau">Niveau</label>
+        <select id="niveau" name="niveau" formControlName="niveau">
+          <option value="">-- Sélectionner --</option>
+          <option value="6e">6e</option>
+          <option value="5e">5e</option>
+          <option value="4e">4e</option>
+          <option value="3e">3e</option>
+          <option value="Seconde">Seconde</option>
+          <option value="Première">Première</option>
+          <option value="Terminale">Terminale</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="effectif_max">Effectif max</label>
+        <input id="effectif_max" name="effectif_max" formControlName="effectif_max" type="number" />
+      </div>
+
+      <div>
+        <label for="description">Description</label>
+        <textarea id="description" name="description" formControlName="description"></textarea>
+      </div>
+
+      <button type="submit" [disabled]="classeForm.invalid">Enregistrer</button>
+    </form>
+  </div>
+</div>
+
+<app-confirm-dialog
+  *ngIf="showConfirm"
+  title="Confirmation"
+  [message]="'Voulez-vous vraiment supprimer la classe ' + selectedClasse?.nom + ' ?'"
+  (confirm)="selectedClasse()"
+  (cancel)="showConfirm = false"
+/>

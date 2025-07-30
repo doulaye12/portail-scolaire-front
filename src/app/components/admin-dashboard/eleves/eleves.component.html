@@ -7,18 +7,12 @@
         [(ngModel)]="searchTerm"
         placeholder="Rechercher par nom ou matricule..."
       />
-
-      <select [(ngModel)]="selectedStatus">
-        <option value="">Tous les matricules</option>
-        <option *ngFor="let mt of matricules" value="{{ mt }}">{{ mt }}</option>
-      </select>
-
       <select [(ngModel)]="selectedClass">
         <option value="">Toutes les classes</option>
         <option *ngFor="let c of classes" [value]="c.nom">{{ c.nom }}</option>
       </select>
+      <button id="add-btn" (click)="openModal()">+ Ajouter un élève</button>
     </div>
-    <button id="add-btn" (click)="openModal()">+ Ajouter un élève</button>
   </div>
 
   <table class="student-table">
@@ -40,10 +34,10 @@
         <td>{{ student.sexe }}</td>
         <td>{{ student.classe?.nom }}</td>
         <td>
-          <button (click)="editStudent(student, i)">
+          <button (click)="editStudent(student)">
             <i class="fa-solid fa-pen-to-square"></i>
           </button>
-          <button (click)="deleteStudent(student.id!)">
+          <button (click)="confirmDelete(student.id!)">
             <i class="fa-solid fa-trash"></i>
           </button>
         </td>
@@ -258,7 +252,7 @@
       <div class="row">
         <div class="col">
           <label for="document_justificatif">Document de justificatif</label>
-          <input type="file"  name="document_justificatif" formControlName="document_justificatif" id="document_justificatif" (change)="onFileSelected($event)">
+          <input type="file"  name="document_justificatif" id="document_justificatif" (change)="onFileSelected($event)">
         </div>
       </div>
       <div class="modal-actions">
@@ -272,3 +266,11 @@
 </div>
 
 <app-custom-toast *ngIf="showToast" [type]="typeToast" [message]="toastMessage"  />
+
+<app-confirm-dialog
+  *ngIf="showConfirm"
+  title="Confirmation"
+  [message]="'Voulez vous vraiment supprimer cet élève ?'"
+  (confirm)="deleteStudent()"
+  (cancel)="showConfirm = false"
+></app-confirm-dialog>

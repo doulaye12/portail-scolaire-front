@@ -1,12 +1,11 @@
 <div class="container">
   <div class="page-header">
     <h2>Gestion des Enseignants</h2>
-    <button class="add-btn" >Ajouter un enseignant</button>
+    <button class="add-btn" (click)="addEnseignant()" >Ajouter un enseignant</button>
   </div>
 
   <div *ngIf="successMessage" class="alert success">{{ successMessage }}</div>
   <div *ngIf="errorMessage" class="alert error">{{ errorMessage }}</div>
-
 
   <table class="styled-table">
     <thead>
@@ -26,62 +25,148 @@
         <td>{{ ens.id }}</td>
         <td>{{ ens.numero_enseignant }}</td>
         <td>{{ ens.specialite }}</td>
-        <td>{{ ens.date_embauche }}</td>
+        <td>{{ ens.date_embauche | date: 'dd/MM/yyyy' }}</td>
         <td>{{ ens.telephone }}</td>
         <td>{{ ens.diplomes }}</td>
         <td>{{ ens.user_id }}</td>
         <td>
-          <button >✏️</button>
-          <button class="danger" >🗑️</button>
+          <button>✏️</button>
+          <button class="danger">🗑️</button>
         </td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<div class="modal-overlay">
+<div class="modal-overlay" *ngIf="showModal" >
   <div class="modal-content">
     <h2>Ajouter un Enseignant</h2>
 
     <form [formGroup]="enseignantForm" (ngSubmit)="onSubmit()">
       <div class="form-field">
         <input formControlName="nom" name="nom" placeholder="Nom" />
-        <div class="error" *ngIf="enseignantForm.get('nom')?.value === '' && enseignantForm.get('nom')?.touched" >champ requis</div>
+        <div
+          class="error"
+          *ngIf="
+            enseignantForm.get('nom')?.value === '' &&
+            enseignantForm.get('nom')?.touched
+          "
+        >
+          champ requis
+        </div>
       </div>
       <div class="form-field">
         <input formControlName="prenom" name="prenom" placeholder="Prénom" />
-        <div class="error" *ngIf="enseignantForm.get('prenom')?.value === '' && enseignantForm.get('prenom')?.touched" >champ requis</div>
+        <div
+          class="error"
+          *ngIf="
+            enseignantForm.get('prenom')?.value === '' &&
+            enseignantForm.get('prenom')?.touched
+          "
+        >
+          champ requis
+        </div>
       </div>
       <div class="form-field">
-        <input formControlName="email" name="email" placeholder="Email" type="email" />
-        <div class="error" *ngIf="enseignantForm.get('email')?.value === '' && enseignantForm.get('email')?.touched" >champ requis</div>
+        <input
+          formControlName="email"
+          name="email"
+          placeholder="Email"
+          type="email"
+        />
+        <div
+          class="error"
+          *ngIf="
+            enseignantForm.get('email')?.value === '' &&
+            enseignantForm.get('email')?.touched
+          "
+        >
+          champ requis
+        </div>
       </div>
       <div class="form-field">
-        <input formControlName="specialite" name="specialite" placeholder="Spécialité" />
-        <div class="error" *ngIf="enseignantForm.get('specialite')?.value === '' && enseignantForm.get('specialite')?.touched" >champ requis</div>
+        <input
+          formControlName="specialite"
+          name="specialite"
+          placeholder="Spécialité"
+        />
+        <div
+          class="error"
+          *ngIf="
+            enseignantForm.get('specialite')?.value === '' &&
+            enseignantForm.get('specialite')?.touched
+          "
+        >
+          champ requis
+        </div>
       </div>
       <div class="form-field">
-        <input formControlName="date_embauche" name="date_embauche" placeholder="Date d'embauche" type="date" />
-        <div class="error" *ngIf="enseignantForm.get('date_embauche')?.value === '' && enseignantForm.get('date_embauche')?.touched" >champ requis</div>
+        <input
+          formControlName="date_embauche"
+          name="date_embauche"
+          placeholder="Date d'embauche"
+          type="date"
+        />
+        <div
+          class="error"
+          *ngIf="
+            enseignantForm.get('date_embauche')?.value === '' &&
+            enseignantForm.get('date_embauche')?.touched
+          "
+        >
+          champ requis
+        </div>
       </div>
       <div class="form-field">
-        <input formControlName="telephone" name="telephone" placeholder="Téléphone" />
-        <div class="error" *ngIf="enseignantForm.get('telephone')?.value === '' && enseignantForm.get('telephone')?.touched" >champ requis</div>
+        <input
+          formControlName="telephone"
+          name="telephone"
+          placeholder="Téléphone"
+        />
+        <div
+          class="error"
+          *ngIf="
+            enseignantForm.get('telephone')?.value === '' &&
+            enseignantForm.get('telephone')?.touched
+          "
+        >
+          champ requis
+        </div>
       </div>
       <div class="form-field">
-        <input formControlName="diplomes" name="diplomes" placeholder="Diplômes" />
-        <div class="error" *ngIf="enseignantForm.get('diplomes')?.value === '' && enseignantForm.get('diplomes')?.touched" >champ requis</div>
+        <input
+          formControlName="diplomes"
+          name="diplomes"
+          placeholder="Diplômes"
+        />
+        <div
+          class="error"
+          *ngIf="
+            enseignantForm.get('diplomes')?.value === '' &&
+            enseignantForm.get('diplomes')?.touched
+          "
+        >
+          champ requis
+        </div>
       </div>
       <div formArrayName="matieres" class="matieres">
-        <div class="select-area" >
-          <div class="select-row" *ngFor="let matiere of matieres.controls; let i = index" [formGroupName]="i">
+        <div class="select-area">
+          <div
+            class="select-row"
+            *ngFor="let matiere of matieres.controls; let i = index"
+            [formGroupName]="i"
+          >
             <select formControlName="matiere_id" name="matiere_id">
               <option value="" selected>Matière</option>
-              <option *ngFor="let mat of allMatieres" [value]="mat.id">{{mat.nom}}</option>
+              <option *ngFor="let mat of allMatieres" [value]="mat.id">
+                {{ mat.nom }}
+              </option>
             </select>
             <select formControlName="classe_id" name="classe_id">
               <option value="">Classe</option>
-              <option *ngFor="let c of classes" [value]="c.id">{{c.nom}}</option>
+              <option *ngFor="let c of classes" [value]="c.id">
+                {{ c.nom }}
+              </option>
               <!-- Dynamise ici -->
             </select>
             <button id="del-btn" type="button" (click)="removeMatiere(i)">
@@ -89,16 +174,14 @@
             </button>
           </div>
         </div>
-        <button id="add-mat-btn" type="button" (click)="addMatiere()">+ Ajouter Matière</button>
+        <button id="add-mat-btn" type="button" (click)="addMatiere()">
+          + Ajouter Matière
+        </button>
       </div>
       <div class="form-footer">
-        <button type="button" >Annuler</button>
-        <button type="submit" >Ajouter</button>
+        <button type="button" (click)="close()">Annuler</button>
+        <button type="submit">Ajouter</button>
       </div>
     </form>
   </div>
 </div>
-
-
-
-
