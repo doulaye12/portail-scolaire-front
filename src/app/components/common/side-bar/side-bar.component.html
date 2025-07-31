@@ -1,7 +1,7 @@
 <aside class="sidebar">
   <h2 class="logo">{{ user.prenom }} {{ user.nom }}</h2>
   <nav class="nav">
-    <a routerLink="/dashboard/{{user.role}}" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+    <a routerLink="/dashboard/{{user.role === 'administrateur' ? 'admin' : user.role}}" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
       <img
         src="assets/icons/layout-dashboard.svg"
         class="icon"

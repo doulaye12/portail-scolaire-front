@@ -20,7 +20,11 @@ export class DashboardComponent implements OnInit{
   }
   
   ngOnInit(): void {
-    this.user = this.authService.getCurrentUser();
+    this.authService.getUserInfos().subscribe((res:any) => {
+      if (res.success) {
+        this.user = res.user
+      }
+    })
   }
 
   
